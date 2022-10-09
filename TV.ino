@@ -27,7 +27,7 @@ void setup()
   Serial.begin(9600);
   RTC.begin();
   dht1.begin();
-  pday=RTC.getHours();
+  pday=RTC.getDay();
   
 //  RTC.setHourMode(CLOCK_H24);
 //  RTC.setDateTime(__DATE__, __TIME__);
@@ -111,18 +111,23 @@ void loop()
       psc=csc;
     }
 
-    if(pday != hr)
+    if(pday != dt)
     {
       onhr=0;
       onmn=0;
-      tvcnt=0;
-      pday=hr;
+
+      if(tvon==1) tvcnt=1;
+      else tvcnt=0;
+      
+      pday=dt;
       ontime=0;
     }
 
   contime=String(onhr)+":"+String(onmn)+":"+String(ontime);
     /////////////////
     
+    Serial.print("TV");
+    Serial.print(",");
     Serial.print(d);
     Serial.print(",");
     Serial.print(t);

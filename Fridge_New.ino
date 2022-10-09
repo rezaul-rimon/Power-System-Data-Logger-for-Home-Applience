@@ -29,12 +29,13 @@ int onmn=0, onhr=0;
 
 int comcntcpy=0, ontimecpy=0, onmncpy=0, onhrcpy=0, dccpy=0;
 
-int pday;
+
 int sw=0, dc=0;
 
 int t1=1, t2=1;
 int sw1=6, sw2=7;
 int frtmp=-20;
+int ptmp=frtmp;
 
 void setup()
 {
@@ -42,7 +43,7 @@ void setup()
   RTC.begin();
   dht1.begin();
   dht2.begin();
-  pday=RTC.getDay();
+  //pday=RTC.getDay();
 
   lcd.init(); 
   lcd.clear();
@@ -69,7 +70,7 @@ void setup()
 void loop()
 {
   int dt=RTC.getDay();
-  int mt=RTC.getMonth()+4;
+  int mt=RTC.getMonth();
   int yr=RTC.getYear()-2000;
   int hr=RTC.getHours();
   int mn=RTC.getMinutes();
@@ -81,6 +82,7 @@ void loop()
     
     float tmp1 = dht1.readTemperature();
     float tmp2 = dht2.readTemperature();
+    
     
     float voltage = pzem.voltage();
     float current = pzem.current();
@@ -165,14 +167,17 @@ if((digitalRead(5)==0) && (tt1==1))
     }
 ////////////
 
-    if(pday != dt)
+    if(ptmp != frtmp)
     {
       onhr=0;
       onmn=0;
       ontime=0;
-      comcnt=0;
+      
+      if(con==1) comcnt=1;
+      else comcnt=0;
+      
       dc=0;
-      pday=dt;
+      ptmp=frtmp;
       
     }
 
@@ -181,7 +186,8 @@ if((digitalRead(5)==0) && (tt1==1))
     //////////////
 
     
-    
+    Serial.print("FRIDGE");
+    Serial.print(",");
     Serial.print(d);
     Serial.print(",");
     Serial.print(t);
